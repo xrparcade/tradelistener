@@ -25,8 +25,16 @@ public class App {
 		// configure log4j
 		BasicConfigurator.configure();
 
-		Exchange exchange = selectExchange(readConfig());
-		exchange.addListener(new TradeListenerLoggingImpl());
+		Config config = readConfig();
+
+		Exchange exchange = selectExchange(config);
+
+		if (config.isSound()) {
+			exchange.addListener(new TradeListenerLoggingAndSoundImpl());
+		} else {
+			exchange.addListener(new TradeListenerLoggingImpl());
+		}
+
 		exchange.run();
 	}
 

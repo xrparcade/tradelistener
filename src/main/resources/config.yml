@@ -1,4 +1,5 @@
 source: zebpay
+sound: true
 zebpay:
    interval: 1
    market: BTC-EUR

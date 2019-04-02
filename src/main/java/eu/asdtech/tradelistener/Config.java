@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class Config {
 	private Source source;
-
+	private boolean sound;
 	private ZebpayConfig zebpay;
 
 	public void validate() {
