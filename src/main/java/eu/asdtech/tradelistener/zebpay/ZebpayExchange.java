@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -22,10 +23,12 @@ public class ZebpayExchange extends Exchange {
 	private final String URI_ROOT = "https://www.zebapi.com/pro/v1/";
 	private final ZebpayConfig config;
 	private final OkHttpClient client = new OkHttpClient();
-	private final ObjectMapper mapper = new ObjectMapper();
+	private final ObjectMapper mapper;
 	private final TradeConverter converter = new TradeConverter();
 
 	public ZebpayExchange(final ZebpayConfig config) throws GenericExchangeException {
+		this.mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		this.config = config;
 		verifyMarket();
 	}
@@ -120,6 +123,7 @@ public class ZebpayExchange extends Exchange {
 			trades = mapper.readValue(response.body().string(), new TypeReference<List<ZebpayTrade>>() {
 			});
 		} catch (IOException e) {
+			e.printStackTrace();
 			log.error("Could not parse trades response from Zebpay");
 		}
 
